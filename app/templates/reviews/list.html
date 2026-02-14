@@ -1,0 +1,267 @@
+{% extends "base.html" %}
+
+{% block title %}Reviews{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <!-- Page Header -->
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900">Reviews</h1>
+            <p class="text-gray-500 mt-1">Browse and filter community reviews</p>
+        </div>
+        <a href="/reviews/new"
+           class="inline-flex items-center px-5 py-2.5 bg-brand-600 text-white font-medium rounded-lg hover:bg-brand-700 transition-colors shadow-sm">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            Write Review
+        </a>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 mb-8">
+        <div class="flex flex-col sm:flex-row gap-4 items-center">
+            <div class="flex-1 w-full sm:w-auto">
+                <label for="category-filter" class="sr-only">Category</label>
+                <select id="category-filter"
+                        class="w-full px-4 py-2.5 border border-gray-300 rounded-lg bg-white text-gray-700 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none">
+                    <option value="">All Categories</option>
+                    <option value="product">Product</option>
+                    <option value="book">Book</option>
+                    <option value="restaurant">Restaurant</option>
+                    <option value="movie">Movie</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <button onclick="loadReviews(1)"
+                    class="px-6 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium">
+                Apply Filter
+            </button>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="reviews-loading" class="flex justify-center py-16">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Reviews Grid -->
+    <div id="reviews-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 hidden"></div>
+
+    <!-- Empty State -->
+    <div id="reviews-empty" class="hidden text-center py-16">
+        <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+        <h3 class="text-lg font-semibold text-gray-500">No reviews found</h3>
+        <p class="text-gray-400 mt-1">Be the first to write a review!</p>
+    </div>
+
+    <!-- Pagination -->
+    <div id="pagination" class="hidden mt-10 flex justify-center items-center space-x-2"></div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const CATEGORIES_COLORS = {
+        product: 'bg-blue-100 text-blue-700',
+        book: 'bg-purple-100 text-purple-700',
+        restaurant: 'bg-orange-100 text-orange-700',
+        movie: 'bg-pink-100 text-pink-700',
+        other: 'bg-gray-100 text-gray-700',
+    };
+
+    let currentPage = 1;
+    const perPage = 9;
+
+    function renderStars(rating) {
+        if (!rating) return '<span class="text-gray-400 text-sm">No rating</span>';
+        let stars = '';
+        for (let i = 1; i <= 5; i++) {
+            if (i <= rating) {
+                stars += '<span class="star-filled">&#9733;</span>';
+            } else {
+                stars += '<span class="star-empty">&#9733;</span>';
+            }
+        }
+        return stars;
+    }
+
+    function createReviewCard(review) {
+        const card = document.createElement('div');
+        card.className = 'review-card bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex flex-col';
+
+        const catClass = CATEGORIES_COLORS[review.category] || CATEGORIES_COLORS.other;
+        const excerpt = review.content.length > 150
+            ? review.content.substring(0, 150) + '...'
+            : review.content;
+        const date = new Date(review.created_at).toLocaleDateString('en-US', {
+            year: 'numeric', month: 'short', day: 'numeric'
+        });
+
+        // Header row
+        const headerRow = document.createElement('div');
+        headerRow.className = 'flex items-start justify-between mb-3';
+
+        const badge = document.createElement('span');
+        badge.className = 'inline-block px-3 py-1 rounded-full text-xs font-medium ' + catClass;
+        badge.textContent = review.category;
+
+        const dateEl = document.createElement('span');
+        dateEl.className = 'text-gray-400 text-sm';
+        dateEl.textContent = date;
+
+        headerRow.appendChild(badge);
+        headerRow.appendChild(dateEl);
+
+        // Title
+        const title = document.createElement('h3');
+        title.className = 'text-lg font-semibold text-gray-900 mb-2 line-clamp-2';
+        title.textContent = review.title;
+
+        // Stars
+        const starsDiv = document.createElement('div');
+        starsDiv.className = 'star-rating mb-3';
+        starsDiv.innerHTML = renderStars(review.rating);
+
+        // Excerpt
+        const excerptEl = document.createElement('p');
+        excerptEl.className = 'text-gray-600 text-sm flex-1 mb-4 line-clamp-3';
+        excerptEl.textContent = excerpt;
+
+        // Footer
+        const footer = document.createElement('div');
+        footer.className = 'flex justify-between items-center pt-3 border-t border-gray-100';
+
+        if (review.summary_id) {
+            const summaryLink = document.createElement('a');
+            summaryLink.href = '/summaries/' + review.summary_id;
+            summaryLink.className = 'text-brand-600 hover:text-brand-700 text-sm font-medium';
+            summaryLink.textContent = 'View Summary';
+            footer.appendChild(summaryLink);
+        } else {
+            footer.appendChild(document.createElement('span'));
+        }
+
+        const detailLink = document.createElement('a');
+        detailLink.href = '#';
+        detailLink.className = 'text-gray-500 hover:text-gray-700 text-sm';
+        detailLink.textContent = 'Details \u2192';
+        detailLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            viewReview(review.id);
+        });
+        footer.appendChild(detailLink);
+
+        card.appendChild(headerRow);
+        card.appendChild(title);
+        card.appendChild(starsDiv);
+        card.appendChild(excerptEl);
+        card.appendChild(footer);
+
+        return card;
+    }
+
+    function renderPagination(total, page, perPageVal) {
+        const totalPages = Math.ceil(total / perPageVal);
+        const pagination = document.getElementById('pagination');
+        if (totalPages <= 1) {
+            pagination.classList.add('hidden');
+            return;
+        }
+
+        pagination.classList.remove('hidden');
+        pagination.textContent = '';
+
+        // Previous button
+        const prevBtn = document.createElement('button');
+        prevBtn.textContent = '\u00AB Prev';
+        prevBtn.className = 'px-4 py-2 rounded-lg border ' +
+            (page === 1 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white text-gray-700 hover:bg-gray-50') +
+            ' transition-colors';
+        if (page > 1) prevBtn.addEventListener('click', () => loadReviews(page - 1));
+        else prevBtn.disabled = true;
+        pagination.appendChild(prevBtn);
+
+        // Page numbers
+        for (let i = 1; i <= totalPages; i++) {
+            if (Math.abs(i - page) > 2 && i !== 1 && i !== totalPages) {
+                if (Math.abs(i - page) === 3) {
+                    const dots = document.createElement('span');
+                    dots.className = 'px-2 text-gray-400';
+                    dots.textContent = '...';
+                    pagination.appendChild(dots);
+                }
+                continue;
+            }
+            const pageBtn = document.createElement('button');
+            pageBtn.textContent = String(i);
+            if (i === page) {
+                pageBtn.className = 'px-4 py-2 rounded-lg bg-brand-600 text-white font-medium';
+            } else {
+                pageBtn.className = 'px-4 py-2 rounded-lg border bg-white text-gray-700 hover:bg-gray-50 transition-colors';
+                pageBtn.addEventListener('click', () => loadReviews(i));
+            }
+            pagination.appendChild(pageBtn);
+        }
+
+        // Next button
+        const nextBtn = document.createElement('button');
+        nextBtn.textContent = 'Next \u00BB';
+        nextBtn.className = 'px-4 py-2 rounded-lg border ' +
+            (page === totalPages ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white text-gray-700 hover:bg-gray-50') +
+            ' transition-colors';
+        if (page < totalPages) nextBtn.addEventListener('click', () => loadReviews(page + 1));
+        else nextBtn.disabled = true;
+        pagination.appendChild(nextBtn);
+    }
+
+    async function loadReviews(page) {
+        if (typeof page === 'undefined') page = 1;
+        currentPage = page;
+        const loading = document.getElementById('reviews-loading');
+        const grid = document.getElementById('reviews-grid');
+        const empty = document.getElementById('reviews-empty');
+        const pagination = document.getElementById('pagination');
+
+        loading.classList.remove('hidden');
+        grid.classList.add('hidden');
+        empty.classList.add('hidden');
+        pagination.classList.add('hidden');
+
+        const category = document.getElementById('category-filter').value;
+        let url = '/api/v1/reviews?page=' + page + '&per_page=' + perPage;
+        if (category) url += '&category=' + encodeURIComponent(category);
+
+        try {
+            const data = await fetchJSON(url);
+            loading.classList.add('hidden');
+
+            if (!data.items || data.items.length === 0) {
+                empty.classList.remove('hidden');
+                return;
+            }
+
+            grid.textContent = '';
+            data.items.forEach(function(review) {
+                grid.appendChild(createReviewCard(review));
+            });
+            grid.classList.remove('hidden');
+            renderPagination(data.total, data.page, data.per_page);
+        } catch (err) {
+            loading.classList.add('hidden');
+            empty.classList.remove('hidden');
+            console.error('Failed to load reviews:', err);
+        }
+    }
+
+    function viewReview(reviewId) {
+        alert('Review detail view - ID: ' + reviewId);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() { loadReviews(1); });
+</script>
+{% endblock %}

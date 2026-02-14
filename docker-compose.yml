@@ -1,0 +1,16 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.dev
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+      - /app/__pycache__
+    env_file:
+      - .env
+    environment:
+      - APP_ENV=development
+      - APP_DEBUG=true
+    restart: unless-stopped

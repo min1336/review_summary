@@ -1,0 +1,71 @@
+name: Claude Nightly Development
+
+on:
+  schedule:
+    - cron: '0 15 * * *'  # 00:00 KST (15:00 UTC)
+  workflow_dispatch:
+
+jobs:
+  process-issues:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      id-token: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Find claude-auto issues
+        id: find-issues
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: 'claude-auto',
+              state: 'open',
+              sort: 'created',
+              direction: 'asc',
+              per_page: 3
+            });
+            if (issues.data.length === 0) {
+              core.setOutput('has_issues', 'false');
+              return;
+            }
+            core.setOutput('has_issues', 'true');
+            core.setOutput('issue_number', issues.data[0].number.toString());
+            core.setOutput('issue_title', issues.data[0].title);
+            core.setOutput('issue_body', issues.data[0].body || '');
+
+      - name: Run Claude on issue
+        if: steps.find-issues.outputs.has_issues == 'true'
+        uses: anthropics/claude-code-action@v1
+        env:
+          ISSUE_NUMBER: ${{ steps.find-issues.outputs.issue_number }}
+          ISSUE_TITLE: ${{ steps.find-issues.outputs.issue_title }}
+          ISSUE_BODY: ${{ steps.find-issues.outputs.issue_body }}
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: |
+            You are working on issue #${{ steps.find-issues.outputs.issue_number }}: ${{ steps.find-issues.outputs.issue_title }}
+
+            Issue description:
+            ${{ steps.find-issues.outputs.issue_body }}
+
+            Instructions:
+            1. Read CLAUDE.md for project conventions
+            2. Create a feature branch from main
+            3. Implement the feature/fix described in the issue
+            4. Write tests for your changes
+            5. Run tests to verify: pytest tests/ -v
+            6. Run linting: ruff check app/ --fix && ruff format app/
+            7. Commit with descriptive message referencing the issue
+            8. Create a PR with clear description
+            9. Comment on the issue with your progress
+
+          claude_args: '--allowedTools Bash Edit Write Read Glob Grep'
