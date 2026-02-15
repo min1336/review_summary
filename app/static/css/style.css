@@ -3,6 +3,43 @@
    Supplements TailwindCSS with component-specific styling
    ============================================================ */
 
+/* ---- Dark Mode Variables ---- */
+:root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f9fafb;
+    --bg-tertiary: #f3f4f6;
+    --text-primary: #111827;
+    --text-secondary: #374151;
+    --text-tertiary: #6b7280;
+    --border-color: #e5e7eb;
+    --border-color-strong: #d1d5db;
+    --shadow-sm: rgba(0, 0, 0, 0.05);
+    --shadow-md: rgba(0, 0, 0, 0.1);
+    --shadow-lg: rgba(0, 0, 0, 0.12);
+    --scrollbar-track: #f9fafb;
+    --scrollbar-thumb: #d1d5db;
+    --scrollbar-thumb-hover: #9ca3af;
+    --modal-backdrop: rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] {
+    --bg-primary: #1f2937;
+    --bg-secondary: #111827;
+    --bg-tertiary: #374151;
+    --text-primary: #f9fafb;
+    --text-secondary: #e5e7eb;
+    --text-tertiary: #9ca3af;
+    --border-color: #374151;
+    --border-color-strong: #4b5563;
+    --shadow-sm: rgba(0, 0, 0, 0.3);
+    --shadow-md: rgba(0, 0, 0, 0.4);
+    --shadow-lg: rgba(0, 0, 0, 0.5);
+    --scrollbar-track: #1f2937;
+    --scrollbar-thumb: #4b5563;
+    --scrollbar-thumb-hover: #6b7280;
+    --modal-backdrop: rgba(0, 0, 0, 0.75);
+}
+
 /* ---- Sentiment Badges ---- */
 .sentiment-positive {
     background-color: #dcfce7;
@@ -119,6 +156,15 @@ button {
     transition-timing-function: ease-in-out;
 }
 
+/* ---- Theme Transition ---- */
+body,
+nav,
+footer,
+.review-card,
+.feature-card {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
 /* ---- Modal Backdrop ---- */
 #login-modal {
     backdrop-filter: blur(4px);
@@ -134,16 +180,16 @@ button {
 }
 
 ::-webkit-scrollbar-track {
-    background: #f9fafb;
+    background: var(--scrollbar-track);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #d1d5db;
+    background: var(--scrollbar-thumb);
     border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #9ca3af;
+    background: var(--scrollbar-thumb-hover);
 }
 
 /* ---- Prose Overrides ---- */
@@ -154,6 +200,37 @@ button {
 .prose ul {
     list-style-type: disc;
     padding-left: 1.5rem;
+}
+
+/* ---- Dark Mode Toggle Button ---- */
+.theme-toggle {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.theme-toggle:hover {
+    background-color: var(--border-color-strong);
+    transform: scale(1.05);
+}
+
+.theme-toggle svg {
+    width: 20px;
+    height: 20px;
+    color: var(--text-secondary);
+    transition: transform 0.3s ease;
+}
+
+.theme-toggle:hover svg {
+    transform: rotate(15deg);
 }
 
 /* ---- Responsive Adjustments ---- */

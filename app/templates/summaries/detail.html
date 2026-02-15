@@ -5,7 +5,7 @@
 {% block content %}
 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
     <!-- Back Link -->
-    <a href="/reviews" class="text-brand-600 hover:text-brand-700 text-sm font-medium inline-flex items-center mb-6">
+    <a href="/reviews" class="text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300 text-sm font-medium inline-flex items-center mb-6">
         <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
         </svg>
@@ -19,38 +19,38 @@
 
     <!-- Error -->
     <div id="summary-error" class="hidden text-center py-20">
-        <svg class="w-16 h-16 text-red-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-16 h-16 text-red-300 dark:text-red-700 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                   d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/>
         </svg>
-        <h3 class="text-lg font-semibold text-gray-500">Failed to load summary</h3>
-        <p id="summary-error-msg" class="text-gray-400 mt-1"></p>
+        <h3 class="text-lg font-semibold text-gray-500 dark:text-gray-400">Failed to load summary</h3>
+        <p id="summary-error-msg" class="text-gray-400 dark:text-gray-500 mt-1"></p>
     </div>
 
     <!-- Summary Content -->
     <div id="summary-content" class="hidden space-y-8">
         <!-- Summary Header Card -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-8">
             <div class="flex flex-col sm:flex-row justify-between items-start gap-4 mb-6">
-                <h1 class="text-2xl font-bold text-gray-900" id="summary-title">AI Summary</h1>
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-white" id="summary-title">AI Summary</h1>
                 <span id="sentiment-badge" class="inline-flex items-center px-4 py-1.5 rounded-full text-sm font-semibold"></span>
             </div>
 
             <!-- Summary Text -->
             <div class="prose max-w-none mb-6">
-                <p id="summary-text" class="text-gray-700 leading-relaxed text-lg"></p>
+                <p id="summary-text" class="text-gray-700 dark:text-gray-300 leading-relaxed text-lg"></p>
             </div>
 
             <!-- Sentiment Score Bar -->
             <div class="mb-4">
                 <div class="flex justify-between items-center mb-2">
-                    <span class="text-sm font-medium text-gray-600">Sentiment Score</span>
-                    <span id="sentiment-score-value" class="text-sm font-semibold text-gray-700"></span>
+                    <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Sentiment Score</span>
+                    <span id="sentiment-score-value" class="text-sm font-semibold text-gray-700 dark:text-gray-300"></span>
                 </div>
-                <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
                     <div id="sentiment-bar" class="h-full rounded-full transition-all duration-500"></div>
                 </div>
-                <div class="flex justify-between text-xs text-gray-400 mt-1">
+                <div class="flex justify-between text-xs text-gray-400 dark:text-gray-500 mt-1">
                     <span>Negative (-1.0)</span>
                     <span>Neutral (0.0)</span>
                     <span>Positive (1.0)</span>
@@ -59,9 +59,9 @@
         </div>
 
         <!-- Keywords -->
-        <div id="keywords-section" class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 hidden">
-            <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center">
-                <svg class="w-5 h-5 mr-2 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div id="keywords-section" class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-8 hidden">
+            <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center">
+                <svg class="w-5 h-5 mr-2 text-brand-600 dark:text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
                 </svg>
@@ -73,8 +73,8 @@
         <!-- Pros & Cons -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- Pros -->
-            <div id="pros-section" class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 hidden">
-                <h2 class="text-lg font-bold text-green-700 mb-4 flex items-center">
+            <div id="pros-section" class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-8 hidden">
+                <h2 class="text-lg font-bold text-green-700 dark:text-green-400 mb-4 flex items-center">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                     </svg>
@@ -84,8 +84,8 @@
             </div>
 
             <!-- Cons -->
-            <div id="cons-section" class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 hidden">
-                <h2 class="text-lg font-bold text-red-700 mb-4 flex items-center">
+            <div id="cons-section" class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-8 hidden">
+                <h2 class="text-lg font-bold text-red-700 dark:text-red-400 mb-4 flex items-center">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                     </svg>
@@ -96,8 +96,8 @@
         </div>
 
         <!-- AI Model Info -->
-        <div id="model-info" class="bg-gray-50 rounded-xl border border-gray-200 px-6 py-4 hidden">
-            <div class="flex items-center text-sm text-gray-500">
+        <div id="model-info" class="bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 px-6 py-4 hidden">
+            <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -184,7 +184,7 @@
                     icon.textContent = '\u2713';
 
                     var text = document.createElement('span');
-                    text.className = 'text-gray-700';
+                    text.className = 'text-gray-700 dark:text-gray-300';
                     text.textContent = pro;
 
                     li.appendChild(icon);
@@ -208,7 +208,7 @@
                     icon.textContent = '\u2717';
 
                     var text = document.createElement('span');
-                    text.className = 'text-gray-700';
+                    text.className = 'text-gray-700 dark:text-gray-300';
                     text.textContent = con;
 
                     li.appendChild(icon);

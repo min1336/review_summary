@@ -14,6 +14,7 @@
 
 var TOKEN_KEY = 'reviewsummary_token';
 var USER_KEY = 'reviewsummary_user';
+var THEME_KEY = 'reviewsummary_theme';
 
 /**
  * Store the authentication token and user info in localStorage.
@@ -224,11 +225,11 @@ function updateAuthUI() {
         container.className = 'flex items-center space-x-3';
 
         var emailSpan = document.createElement('span');
-        emailSpan.className = 'text-sm text-gray-600 hidden sm:inline';
+        emailSpan.className = 'text-sm text-gray-600 dark:text-gray-300 hidden sm:inline';
         emailSpan.textContent = user.email;
 
         var logoutBtn = document.createElement('button');
-        logoutBtn.className = 'text-gray-500 hover:text-red-600 text-sm font-medium transition-colors';
+        logoutBtn.className = 'text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 text-sm font-medium transition-colors';
         logoutBtn.textContent = 'Sign Out';
         logoutBtn.addEventListener('click', handleLogout);
 
@@ -238,7 +239,7 @@ function updateAuthUI() {
     } else {
         var loginBtn = document.createElement('button');
         loginBtn.id = 'login-btn';
-        loginBtn.className = 'text-gray-600 hover:text-brand-600 font-medium transition-colors';
+        loginBtn.className = 'text-gray-600 dark:text-gray-300 hover:text-brand-600 dark:hover:text-brand-400 font-medium transition-colors';
         loginBtn.textContent = 'Sign In';
         loginBtn.addEventListener('click', showLoginModal);
         authSection.appendChild(loginBtn);
@@ -246,9 +247,84 @@ function updateAuthUI() {
 }
 
 /* ============================================================
+   Dark Mode / Theme Management
+   ============================================================ */
+
+/**
+ * Get the current theme from localStorage or system preference.
+ * @returns {string} 'light' or 'dark'
+ */
+function getTheme() {
+    var stored = localStorage.getItem(THEME_KEY);
+    if (stored) {
+        return stored;
+    }
+    // Check system preference
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return 'dark';
+    }
+    return 'light';
+}
+
+/**
+ * Set the theme and persist to localStorage.
+ * @param {string} theme - 'light' or 'dark'
+ */
+function setTheme(theme) {
+    localStorage.setItem(THEME_KEY, theme);
+    applyTheme(theme);
+}
+
+/**
+ * Apply the theme to the document.
+ * @param {string} theme - 'light' or 'dark'
+ */
+function applyTheme(theme) {
+    if (theme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+        document.documentElement.removeAttribute('data-theme');
+    }
+    updateThemeToggleIcon(theme);
+}
+
+/**
+ * Toggle between light and dark themes.
+ */
+function toggleTheme() {
+    var current = getTheme();
+    var next = current === 'dark' ? 'light' : 'dark';
+    setTheme(next);
+}
+
+/**
+ * Update the theme toggle button icon.
+ * @param {string} theme - 'light' or 'dark'
+ */
+function updateThemeToggleIcon(theme) {
+    var toggleBtn = document.getElementById('theme-toggle');
+    if (!toggleBtn) return;
+
+    var iconHTML = theme === 'dark'
+        ? '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>'
+        : '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>';
+
+    toggleBtn.innerHTML = iconHTML;
+}
+
+/**
+ * Initialize theme on page load.
+ */
+function initTheme() {
+    var theme = getTheme();
+    applyTheme(theme);
+}
+
+/* ============================================================
    Initialisation
    ============================================================ */
 
 document.addEventListener('DOMContentLoaded', function () {
+    initTheme();
     updateAuthUI();
 });

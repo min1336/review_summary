@@ -6,8 +6,8 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
     <!-- Page Header -->
     <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900">Analytics Dashboard</h1>
-        <p class="text-gray-500 mt-1">Overview of review sentiment and category distribution</p>
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Analytics Dashboard</h1>
+        <p class="text-gray-500 dark:text-gray-400 mt-1">Overview of review sentiment and category distribution</p>
     </div>
 
     <!-- Loading -->
@@ -17,67 +17,67 @@
 
     <!-- Error -->
     <div id="analytics-error" class="hidden text-center py-20">
-        <svg class="w-16 h-16 text-red-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-16 h-16 text-red-300 dark:text-red-700 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                   d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/>
         </svg>
-        <h3 class="text-lg font-semibold text-gray-500">Failed to load analytics</h3>
-        <p id="analytics-error-msg" class="text-gray-400 mt-1"></p>
+        <h3 class="text-lg font-semibold text-gray-500 dark:text-gray-400">Failed to load analytics</h3>
+        <p id="analytics-error-msg" class="text-gray-400 dark:text-gray-500 mt-1"></p>
     </div>
 
     <!-- Analytics Content -->
     <div id="analytics-content" class="hidden">
         <!-- Top Stats Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-medium text-gray-500">Total Reviews</p>
-                        <p id="total-reviews" class="text-3xl font-bold text-gray-900 mt-1">0</p>
+                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Reviews</p>
+                        <p id="total-reviews" class="text-3xl font-bold text-gray-900 dark:text-white mt-1">0</p>
                     </div>
-                    <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                        <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center">
+                        <svg class="w-6 h-6 text-brand-600 dark:text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                   d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                         </svg>
                     </div>
                 </div>
             </div>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-medium text-gray-500">Avg Rating</p>
-                        <p id="avg-rating" class="text-3xl font-bold text-yellow-500 mt-1">N/A</p>
+                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Avg Rating</p>
+                        <p id="avg-rating" class="text-3xl font-bold text-yellow-500 dark:text-yellow-400 mt-1">N/A</p>
                     </div>
-                    <div class="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center">
-                        <svg class="w-6 h-6 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                    <div class="w-12 h-12 bg-yellow-100 dark:bg-yellow-900/30 rounded-xl flex items-center justify-center">
+                        <svg class="w-6 h-6 text-yellow-500 dark:text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
                         </svg>
                     </div>
                 </div>
             </div>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-medium text-gray-500">Positive</p>
-                        <p id="positive-count" class="text-3xl font-bold text-green-600 mt-1">0</p>
+                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Positive</p>
+                        <p id="positive-count" class="text-3xl font-bold text-green-600 dark:text-green-400 mt-1">0</p>
                     </div>
-                    <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-xl flex items-center justify-center">
+                        <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                   d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
                     </div>
                 </div>
             </div>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-medium text-gray-500">Negative</p>
-                        <p id="negative-count" class="text-3xl font-bold text-red-600 mt-1">0</p>
+                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Negative</p>
+                        <p id="negative-count" class="text-3xl font-bold text-red-600 dark:text-red-400 mt-1">0</p>
                     </div>
-                    <div class="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center">
-                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-xl flex items-center justify-center">
+                        <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                   d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
@@ -89,28 +89,28 @@
         <!-- Charts Row -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
             <!-- Sentiment Distribution Chart -->
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
-                <h2 class="text-lg font-bold text-gray-900 mb-6">Sentiment Distribution</h2>
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-8">
+                <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-6">Sentiment Distribution</h2>
                 <div id="sentiment-chart" class="space-y-4">
                     <!-- Bars will be inserted here -->
                 </div>
             </div>
 
             <!-- Category Breakdown -->
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
-                <h2 class="text-lg font-bold text-gray-900 mb-6">Category Breakdown</h2>
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-8">
+                <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-6">Category Breakdown</h2>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left">
                         <thead>
-                            <tr class="border-b border-gray-200">
-                                <th class="pb-3 text-sm font-semibold text-gray-600">Category</th>
-                                <th class="pb-3 text-sm font-semibold text-gray-600 text-center">Count</th>
-                                <th class="pb-3 text-sm font-semibold text-gray-600 text-center">Avg Rating</th>
+                            <tr class="border-b border-gray-200 dark:border-gray-700">
+                                <th class="pb-3 text-sm font-semibold text-gray-600 dark:text-gray-400">Category</th>
+                                <th class="pb-3 text-sm font-semibold text-gray-600 dark:text-gray-400 text-center">Count</th>
+                                <th class="pb-3 text-sm font-semibold text-gray-600 dark:text-gray-400 text-center">Avg Rating</th>
                             </tr>
                         </thead>
                         <tbody id="category-table-body"></tbody>
                     </table>
-                    <div id="no-categories" class="hidden text-center text-gray-400 py-6">No category data available</div>
+                    <div id="no-categories" class="hidden text-center text-gray-400 dark:text-gray-500 py-6">No category data available</div>
                 </div>
             </div>
         </div>
@@ -149,14 +149,14 @@
             label.textContent = sentiment;
 
             var valueSpan = document.createElement('span');
-            valueSpan.className = 'text-sm text-gray-500';
+            valueSpan.className = 'text-sm text-gray-500 dark:text-gray-400';
             valueSpan.textContent = count + ' (' + pct + '%)';
 
             labelRow.appendChild(label);
             labelRow.appendChild(valueSpan);
 
             var barBg = document.createElement('div');
-            barBg.className = 'w-full bg-gray-100 rounded-full h-4 overflow-hidden';
+            barBg.className = 'w-full bg-gray-100 dark:bg-gray-700 rounded-full h-4 overflow-hidden';
 
             var barFill = document.createElement('div');
             barFill.className = 'h-full rounded-full transition-all duration-700 ' + colors.bar;
@@ -189,7 +189,7 @@
 
         categories.forEach(function(cat) {
             var tr = document.createElement('tr');
-            tr.className = 'border-b border-gray-100';
+            tr.className = 'border-b border-gray-100 dark:border-gray-700';
 
             var nameTd = document.createElement('td');
             nameTd.className = 'py-3';
@@ -200,7 +200,7 @@
             nameTd.appendChild(badge);
 
             var countTd = document.createElement('td');
-            countTd.className = 'py-3 text-center font-semibold text-gray-700';
+            countTd.className = 'py-3 text-center font-semibold text-gray-700 dark:text-gray-300';
             countTd.textContent = cat.count;
 
             var ratingTd = document.createElement('td');
