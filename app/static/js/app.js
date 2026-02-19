@@ -5,6 +5,7 @@
  * - API helper functions (fetchJSON wrapper)
  * - Authentication token management (localStorage)
  * - Login/signup modal handling
+ * - Dark mode toggle with localStorage persistence
  * - Utility functions (escapeHtml, etc.)
  */
 
@@ -14,6 +15,7 @@
 
 var TOKEN_KEY = 'reviewsummary_token';
 var USER_KEY = 'reviewsummary_user';
+var DARK_MODE_KEY = 'reviewsummary_darkmode';
 
 /**
  * Store the authentication token and user info in localStorage.
@@ -51,6 +53,37 @@ function getUser() {
 function clearAuth() {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
+}
+
+/* ============================================================
+   Dark Mode
+   ============================================================ */
+
+/**
+ * Toggle dark mode on/off and persist the preference in localStorage.
+ */
+function toggleDarkMode() {
+    var isDark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem(DARK_MODE_KEY, isDark ? 'dark' : 'light');
+    updateDarkModeToggle();
+}
+
+/**
+ * Update the dark mode toggle button icons to reflect the current mode.
+ */
+function updateDarkModeToggle() {
+    var isDark = document.documentElement.classList.contains('dark');
+    var sunIcon = document.getElementById('dark-mode-sun');
+    var moonIcon = document.getElementById('dark-mode-moon');
+    if (sunIcon) sunIcon.classList.toggle('hidden', !isDark);
+    if (moonIcon) moonIcon.classList.toggle('hidden', isDark);
+}
+
+/**
+ * Initialise dark mode icon state after DOM is ready.
+ */
+function initDarkMode() {
+    updateDarkModeToggle();
 }
 
 /* ============================================================
@@ -224,11 +257,11 @@ function updateAuthUI() {
         container.className = 'flex items-center space-x-3';
 
         var emailSpan = document.createElement('span');
-        emailSpan.className = 'text-sm text-gray-600 hidden sm:inline';
+        emailSpan.className = 'text-sm text-gray-600 dark:text-gray-300 hidden sm:inline';
         emailSpan.textContent = user.email;
 
         var logoutBtn = document.createElement('button');
-        logoutBtn.className = 'text-gray-500 hover:text-red-600 text-sm font-medium transition-colors';
+        logoutBtn.className = 'text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 text-sm font-medium transition-colors';
         logoutBtn.textContent = 'Sign Out';
         logoutBtn.addEventListener('click', handleLogout);
 
@@ -238,7 +271,7 @@ function updateAuthUI() {
     } else {
         var loginBtn = document.createElement('button');
         loginBtn.id = 'login-btn';
-        loginBtn.className = 'text-gray-600 hover:text-brand-600 font-medium transition-colors';
+        loginBtn.className = 'text-gray-600 dark:text-gray-300 hover:text-brand-600 dark:hover:text-brand-400 font-medium transition-colors';
         loginBtn.textContent = 'Sign In';
         loginBtn.addEventListener('click', showLoginModal);
         authSection.appendChild(loginBtn);
@@ -251,4 +284,5 @@ function updateAuthUI() {
 
 document.addEventListener('DOMContentLoaded', function () {
     updateAuthUI();
+    initDarkMode();
 });
