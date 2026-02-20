@@ -246,9 +246,76 @@ function updateAuthUI() {
 }
 
 /* ============================================================
+   Dark Mode
+   ============================================================ */
+
+var THEME_KEY = 'reviewsummary_theme';
+
+/**
+ * Apply the given theme ('dark' or 'light') to the document root and update
+ * the toggle button icon to match.
+ *
+ * @param {string} theme - 'dark' or 'light'
+ */
+function applyTheme(theme) {
+    if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+    } else {
+        document.documentElement.classList.remove('dark');
+    }
+    updateThemeToggle(theme);
+}
+
+/**
+ * Initialise theme on page load.
+ * Uses the stored localStorage preference, falling back to the OS preference.
+ */
+function initTheme() {
+    var stored = localStorage.getItem(THEME_KEY);
+    if (stored === 'dark' || stored === 'light') {
+        applyTheme(stored);
+    } else {
+        var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        applyTheme(prefersDark ? 'dark' : 'light');
+    }
+}
+
+/**
+ * Toggle between dark and light mode and persist the preference.
+ */
+function toggleTheme() {
+    var isDark = document.documentElement.classList.contains('dark');
+    var newTheme = isDark ? 'light' : 'dark';
+    localStorage.setItem(THEME_KEY, newTheme);
+    applyTheme(newTheme);
+}
+
+/**
+ * Update the toggle button icons to reflect the active theme.
+ * The sun icon is shown in dark mode (click to switch to light).
+ * The moon icon is shown in light mode (click to switch to dark).
+ *
+ * @param {string} theme - 'dark' or 'light'
+ */
+function updateThemeToggle(theme) {
+    var sunIcon = document.getElementById('theme-icon-sun');
+    var moonIcon = document.getElementById('theme-icon-moon');
+    if (!sunIcon || !moonIcon) return;
+
+    if (theme === 'dark') {
+        sunIcon.classList.remove('hidden');
+        moonIcon.classList.add('hidden');
+    } else {
+        sunIcon.classList.add('hidden');
+        moonIcon.classList.remove('hidden');
+    }
+}
+
+/* ============================================================
    Initialisation
    ============================================================ */
 
 document.addEventListener('DOMContentLoaded', function () {
     updateAuthUI();
+    initTheme();
 });

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Literal, Optional
+from typing import Literal
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
@@ -22,7 +22,7 @@ class SummaryCreate(BaseModel):
     keywords: list[str] = Field(default_factory=list, description="Extracted keywords")
     pros: list[str] = Field(default_factory=list, description="Identified pros/advantages")
     cons: list[str] = Field(default_factory=list, description="Identified cons/disadvantages")
-    ai_model: Optional[str] = Field(None, description="AI model used for summarization")
+    ai_model: str | None = Field(None, description="AI model used for summarization")
 
     @field_validator("sentiment_score")
     @classmethod
@@ -43,5 +43,5 @@ class SummaryResponse(BaseModel):
     keywords: list[str]
     pros: list[str]
     cons: list[str]
-    ai_model: Optional[str] = None
+    ai_model: str | None = None
     created_at: datetime
