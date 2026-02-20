@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 import logging
-from typing import Any, Dict, List
+from typing import Any
 
 import httpx
 
@@ -207,7 +207,7 @@ class AIService:
     # ------------------------------------------------------------------
 
     @staticmethod
-    def _parse_ai_response(raw_text: str) -> Dict[str, Any]:
+    def _parse_ai_response(raw_text: str) -> dict[str, Any]:
         """Parse the raw JSON text returned by an AI model.
 
         Normalises keys and applies sensible defaults so that the result
@@ -222,15 +222,15 @@ class AIService:
         Raises:
             json.JSONDecodeError: If ``raw_text`` is not valid JSON.
         """
-        parsed: Dict[str, Any] = json.loads(raw_text)
+        parsed: dict[str, Any] = json.loads(raw_text)
 
         # Ensure required fields have sensible defaults.
         summary = parsed.get("summary", "")
         sentiment = parsed.get("sentiment", "neutral")
         sentiment_score = parsed.get("sentiment_score", 0.0)
-        keywords: List[str] = parsed.get("keywords", [])
-        pros: List[str] = parsed.get("pros", [])
-        cons: List[str] = parsed.get("cons", [])
+        keywords: list[str] = parsed.get("keywords", [])
+        pros: list[str] = parsed.get("pros", [])
+        cons: list[str] = parsed.get("cons", [])
 
         # Clamp sentiment_score to valid range.
         sentiment_score = max(-1.0, min(1.0, float(sentiment_score)))

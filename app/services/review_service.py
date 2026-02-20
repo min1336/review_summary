@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
 from uuid import UUID
 
 from app.core.exceptions import AuthorizationException, NotFoundException
@@ -23,7 +22,7 @@ class ReviewService:
     def create_review(
         self,
         data: ReviewCreate,
-        author_id: Optional[UUID] = None,
+        author_id: UUID | None = None,
     ) -> ReviewResponse:
         """Create a new review.
 
@@ -61,7 +60,7 @@ class ReviewService:
         self,
         page: int = 1,
         per_page: int = 20,
-        category: Optional[str] = None,
+        category: str | None = None,
     ) -> ReviewListResponse:
         """List reviews with pagination and optional category filter.
 

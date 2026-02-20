@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any, List, Tuple
+from typing import Any
 from uuid import UUID
 
 from app.repositories.base import BaseRepository
@@ -19,7 +19,7 @@ class ReviewRepository(BaseRepository):
         category: str,
         page: int = 1,
         per_page: int = 20,
-    ) -> Tuple[List[dict], int]:
+    ) -> tuple[list[dict], int]:
         """Get paginated reviews filtered by category.
 
         Args:
@@ -37,7 +37,7 @@ class ReviewRepository(BaseRepository):
         author_id: UUID,
         page: int = 1,
         per_page: int = 20,
-    ) -> Tuple[List[dict], int]:
+    ) -> tuple[list[dict], int]:
         """Get paginated reviews filtered by author.
 
         Args:
@@ -55,7 +55,7 @@ class ReviewRepository(BaseRepository):
         query: str,
         page: int = 1,
         per_page: int = 20,
-    ) -> Tuple[List[dict], int]:
+    ) -> tuple[list[dict], int]:
         """Full-text search across review title and content using ``ilike``.
 
         Args:

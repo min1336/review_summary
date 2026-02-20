@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, List, Optional
+from typing import Any
 from uuid import UUID, uuid4
 
 
@@ -16,10 +16,10 @@ class Summary:
     sentiment: str
     sentiment_score: float
     id: UUID = field(default_factory=uuid4)
-    keywords: List[str] = field(default_factory=list)
-    pros: List[str] = field(default_factory=list)
-    cons: List[str] = field(default_factory=list)
-    ai_model: Optional[str] = None
+    keywords: list[str] = field(default_factory=list)
+    pros: list[str] = field(default_factory=list)
+    cons: list[str] = field(default_factory=list)
+    ai_model: str | None = None
     created_at: datetime = field(default_factory=datetime.now)
 
     @classmethod
