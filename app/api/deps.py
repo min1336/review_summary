@@ -3,9 +3,9 @@
 from __future__ import annotations
 
 from fastapi import HTTPException, Request
-from supabase import Client, create_client
 
 from app.core.config import get_settings
+from supabase import Client, create_client
 
 
 def get_supabase_client() -> Client:

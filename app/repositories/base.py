@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from abc import ABC
-from typing import Any, List, Optional, Tuple
+from typing import Any
 from uuid import UUID
 
 
@@ -19,7 +19,7 @@ class BaseRepository(ABC):
         self.table_name = table_name
         self.client = supabase_client
 
-    def get_by_id(self, id: UUID) -> Optional[dict]:
+    def get_by_id(self, id: UUID) -> dict | None:
         """Get a single record by ID.
 
         Args:
@@ -42,7 +42,7 @@ class BaseRepository(ABC):
         page: int = 1,
         per_page: int = 20,
         **filters: Any,
-    ) -> Tuple[List[dict], int]:
+    ) -> tuple[list[dict], int]:
         """Get paginated records with optional equality filters.
 
         Args:
@@ -81,7 +81,7 @@ class BaseRepository(ABC):
         response = self.client.table(self.table_name).insert(data).execute()
         return response.data[0]
 
-    def update(self, id: UUID, data: dict) -> Optional[dict]:
+    def update(self, id: UUID, data: dict) -> dict | None:
         """Update an existing record.
 
         Args:

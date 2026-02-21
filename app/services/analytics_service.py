@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from app.dto.analytics import AnalyticsResponse, CategoryStats, SentimentStats
 
@@ -46,9 +46,9 @@ class AnalyticsService:
             .select("sentiment", count="exact")
             .execute()
         )
-        summaries: List[Dict[str, Any]] = response.data or []
+        summaries: list[dict[str, Any]] = response.data or []
 
-        counts: Dict[str, int] = {
+        counts: dict[str, int] = {
             "positive": 0,
             "negative": 0,
             "neutral": 0,
@@ -70,16 +70,16 @@ class AnalyticsService:
             total=total,
         )
 
-    def _get_category_stats(self) -> List[CategoryStats]:
+    def _get_category_stats(self) -> list[CategoryStats]:
         """Compute per-category review counts and average ratings."""
         response = (
             self.client.table("reviews")
             .select("category, rating")
             .execute()
         )
-        reviews: List[Dict[str, Any]] = response.data or []
+        reviews: list[dict[str, Any]] = response.data or []
 
-        category_data: Dict[str, Dict[str, Any]] = {}
+        category_data: dict[str, dict[str, Any]] = {}
 
         for row in reviews:
             cat = row.get("category", "other")
@@ -92,9 +92,9 @@ class AnalyticsService:
                 category_data[cat]["rating_sum"] += float(rating)
                 category_data[cat]["rating_count"] += 1
 
-        stats: List[CategoryStats] = []
+        stats: list[CategoryStats] = []
         for cat, info in sorted(category_data.items()):
-            avg: Optional[float] = None
+            avg: float | None = None
             if info["rating_count"] > 0:
                 avg = round(info["rating_sum"] / info["rating_count"], 2)
             stats.append(
@@ -112,7 +112,7 @@ class AnalyticsService:
         )
         return response.count if response.count is not None else 0
 
-    def _get_average_rating(self) -> Optional[float]:
+    def _get_average_rating(self) -> float | None:
         """Compute the overall average rating across all reviews."""
         response = (
             self.client.table("reviews")
@@ -120,7 +120,7 @@ class AnalyticsService:
             .not_("rating", "is", "null")
             .execute()
         )
-        rows: List[Dict[str, Any]] = response.data or []
+        rows: list[dict[str, Any]] = response.data or []
 
         if not rows:
             return None
