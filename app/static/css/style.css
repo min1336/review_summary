@@ -162,3 +162,55 @@ button {
         font-size: 1.75rem;
     }
 }
+
+/* ============================================================
+   Dark Mode
+   ============================================================ */
+
+/* Smooth theme transition on key layout elements */
+body,
+nav,
+footer,
+.bg-white {
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+/* ---- Dark Mode: Sentiment Badges ---- */
+.dark .sentiment-positive {
+    background-color: #14532d;
+    color: #bbf7d0;
+}
+
+.dark .sentiment-negative {
+    background-color: #7f1d1d;
+    color: #fecaca;
+}
+
+.dark .sentiment-neutral {
+    background-color: #1f2937;
+    color: #d1d5db;
+}
+
+.dark .sentiment-mixed {
+    background-color: #713f12;
+    color: #fef08a;
+}
+
+/* ---- Dark Mode: Loading Spinner ---- */
+.dark .loading-spinner {
+    border-color: #374151;
+    border-top-color: #60a5fa;
+}
+
+/* ---- Dark Mode: Scrollbar ---- */
+.dark ::-webkit-scrollbar-track {
+    background: #1f2937;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+    background: #4b5563;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+    background: #6b7280;
+}

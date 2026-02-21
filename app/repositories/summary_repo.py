@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any, List, Tuple
+from typing import Any
 
 from app.repositories.base import BaseRepository
 
@@ -18,7 +18,7 @@ class SummaryRepository(BaseRepository):
         sentiment: str,
         page: int = 1,
         per_page: int = 20,
-    ) -> Tuple[List[dict], int]:
+    ) -> tuple[list[dict], int]:
         """Get paginated summaries filtered by sentiment.
 
         Args:

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Literal, Optional
+from typing import Literal
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -17,20 +17,20 @@ class ReviewCreate(BaseModel):
     category: Literal["product", "book", "restaurant", "movie", "other"] = Field(
         ..., description="Review category"
     )
-    rating: Optional[int] = Field(None, ge=1, le=5, description="Rating from 1 to 5")
-    source: Optional[str] = Field(None, max_length=500, description="Source URL or reference")
+    rating: int | None = Field(None, ge=1, le=5, description="Rating from 1 to 5")
+    source: str | None = Field(None, max_length=500, description="Source URL or reference")
 
 
 class ReviewUpdate(BaseModel):
     """DTO for updating an existing review. All fields are optional."""
 
-    title: Optional[str] = Field(None, min_length=1, max_length=200, description="Review title")
-    content: Optional[str] = Field(None, min_length=1, description="Review content")
-    category: Optional[Literal["product", "book", "restaurant", "movie", "other"]] = Field(
+    title: str | None = Field(None, min_length=1, max_length=200, description="Review title")
+    content: str | None = Field(None, min_length=1, description="Review content")
+    category: Literal["product", "book", "restaurant", "movie", "other"] | None = Field(
         None, description="Review category"
     )
-    rating: Optional[int] = Field(None, ge=1, le=5, description="Rating from 1 to 5")
-    source: Optional[str] = Field(None, max_length=500, description="Source URL or reference")
+    rating: int | None = Field(None, ge=1, le=5, description="Rating from 1 to 5")
+    source: str | None = Field(None, max_length=500, description="Source URL or reference")
 
 
 class ReviewResponse(BaseModel):
@@ -42,10 +42,10 @@ class ReviewResponse(BaseModel):
     title: str
     content: str
     category: str
-    rating: Optional[int] = None
-    source: Optional[str] = None
-    author_id: Optional[UUID] = None
-    summary_id: Optional[UUID] = None
+    rating: int | None = None
+    source: str | None = None
+    author_id: UUID | None = None
+    summary_id: UUID | None = None
     created_at: datetime
     updated_at: datetime
 
