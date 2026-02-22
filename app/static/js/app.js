@@ -14,6 +14,7 @@
 
 var TOKEN_KEY = 'reviewsummary_token';
 var USER_KEY = 'reviewsummary_user';
+var THEME_KEY = 'reviewsummary_theme';
 
 /**
  * Store the authentication token and user info in localStorage.
@@ -246,9 +247,58 @@ function updateAuthUI() {
 }
 
 /* ============================================================
+   Dark Mode
+   ============================================================ */
+
+/**
+ * Check whether dark mode is currently active.
+ */
+function isDarkMode() {
+    return document.documentElement.classList.contains('dark');
+}
+
+/**
+ * Apply dark mode state to the DOM and update the toggle button icons.
+ *
+ * @param {boolean} dark - True to enable dark mode, false for light.
+ */
+function applyDarkMode(dark) {
+    if (dark) {
+        document.documentElement.classList.add('dark');
+    } else {
+        document.documentElement.classList.remove('dark');
+    }
+
+    var sun = document.getElementById('icon-sun');
+    var moon = document.getElementById('icon-moon');
+    if (sun) sun.classList.toggle('hidden', !dark);
+    if (moon) moon.classList.toggle('hidden', dark);
+}
+
+/**
+ * Toggle dark mode and persist the preference in localStorage.
+ */
+function toggleDarkMode() {
+    var dark = !isDarkMode();
+    applyDarkMode(dark);
+    localStorage.setItem(THEME_KEY, dark ? 'dark' : 'light');
+}
+
+/**
+ * Initialise dark mode on page load.
+ * Priority: localStorage preference → system preference (prefers-color-scheme).
+ * Note: the <html> class is already set by the inline script in <head>,
+ * so this function only needs to sync the toggle-button icons.
+ */
+function initDarkMode() {
+    applyDarkMode(isDarkMode());
+}
+
+/* ============================================================
    Initialisation
    ============================================================ */
 
 document.addEventListener('DOMContentLoaded', function () {
     updateAuthUI();
+    initDarkMode();
 });

@@ -92,7 +92,7 @@ async def create_review(
     return ReviewResponse(**response.data[0])
 
 
-@router.delete("/{review_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{review_id}", status_code=status.HTTP_204_NO_CONTENT, response_model=None)
 async def delete_review(
     review_id: UUID,
     current_user: dict = Depends(get_current_user),

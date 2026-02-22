@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Optional
+from typing import Any
 from uuid import UUID
 
 
@@ -17,7 +17,7 @@ class UserRepository:
     def __init__(self, client: Any) -> None:
         self.client = client
 
-    def get_by_id(self, user_id: UUID) -> Optional[dict]:
+    def get_by_id(self, user_id: UUID) -> dict | None:
         """Retrieve a user from Supabase Auth by their UUID.
 
         Args:
