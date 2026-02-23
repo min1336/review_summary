@@ -246,9 +246,69 @@ function updateAuthUI() {
 }
 
 /* ============================================================
+   Dark Mode Management
+   ============================================================ */
+
+var DARK_MODE_KEY = 'reviewsummary_dark_mode';
+
+/**
+ * Initialize dark mode based on localStorage preference or system preference.
+ * Called on DOMContentLoaded to sync the toggle icon with the current state.
+ */
+function initDarkMode() {
+    var isDark = document.documentElement.classList.contains('dark');
+    updateDarkModeIcon(isDark);
+}
+
+/**
+ * Toggle between dark and light mode with a smooth transition.
+ */
+function toggleDarkMode() {
+    document.documentElement.classList.add('dark-transitioning');
+
+    var isDark = !document.documentElement.classList.contains('dark');
+    applyDarkMode(isDark);
+    localStorage.setItem(DARK_MODE_KEY, isDark ? 'dark' : 'light');
+
+    setTimeout(function () {
+        document.documentElement.classList.remove('dark-transitioning');
+    }, 300);
+}
+
+/**
+ * Apply or remove dark mode class on the root element.
+ */
+function applyDarkMode(isDark) {
+    if (isDark) {
+        document.documentElement.classList.add('dark');
+    } else {
+        document.documentElement.classList.remove('dark');
+    }
+    updateDarkModeIcon(isDark);
+}
+
+/**
+ * Update the dark mode toggle button icons to reflect the current mode.
+ */
+function updateDarkModeIcon(isDark) {
+    var sunIcon = document.getElementById('sun-icon');
+    var moonIcon = document.getElementById('moon-icon');
+    if (!sunIcon || !moonIcon) return;
+
+    if (isDark) {
+        sunIcon.classList.remove('hidden');
+        moonIcon.classList.add('hidden');
+    } else {
+        sunIcon.classList.add('hidden');
+        moonIcon.classList.remove('hidden');
+    }
+}
+
+/* ============================================================
    Initialisation
    ============================================================ */
 
 document.addEventListener('DOMContentLoaded', function () {
     updateAuthUI();
+    initDarkMode();
 });

@@ -5,6 +5,7 @@ from __future__ import annotations
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi.responses import Response
 
 from app.api.deps import get_current_user, get_supabase_client
 from app.dto.review import ReviewCreate, ReviewListResponse, ReviewResponse
@@ -50,12 +51,7 @@ async def get_review(review_id: UUID) -> ReviewResponse:
     """Get a single review by ID."""
     supabase = get_supabase_client()
 
-    response = (
-        supabase.table("reviews")
-        .select("*")
-        .eq("id", str(review_id))
-        .execute()
-    )
+    response = supabase.table("reviews").select("*").eq("id", str(review_id)).execute()
 
     if not response.data:
         raise HTTPException(
@@ -77,11 +73,7 @@ async def create_review(
     insert_data = review_data.model_dump()
     insert_data["author_id"] = current_user["id"]
 
-    response = (
-        supabase.table("reviews")
-        .insert(insert_data)
-        .execute()
-    )
+    response = supabase.table("reviews").insert(insert_data).execute()
 
     if not response.data:
         raise HTTPException(
@@ -92,21 +84,16 @@ async def create_review(
     return ReviewResponse(**response.data[0])
 
 
-@router.delete("/{review_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{review_id}", status_code=status.HTTP_204_NO_CONTENT, response_class=Response)
 async def delete_review(
     review_id: UUID,
     current_user: dict = Depends(get_current_user),
-) -> None:
+) -> Response:
     """Delete a review. Requires authentication and must be the author."""
     supabase = get_supabase_client()
 
     # Fetch the review to verify ownership
-    existing = (
-        supabase.table("reviews")
-        .select("*")
-        .eq("id", str(review_id))
-        .execute()
-    )
+    existing = supabase.table("reviews").select("*").eq("id", str(review_id)).execute()
 
     if not existing.data:
         raise HTTPException(
@@ -122,6 +109,7 @@ async def delete_review(
         )
 
     supabase.table("reviews").delete().eq("id", str(review_id)).execute()
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 @router.post("/{review_id}/summarize", response_model=SummaryResponse)
@@ -133,12 +121,7 @@ async def summarize_review(
     supabase = get_supabase_client()
 
     # Fetch the review
-    review_response = (
-        supabase.table("reviews")
-        .select("*")
-        .eq("id", str(review_id))
-        .execute()
-    )
+    review_response = supabase.table("reviews").select("*").eq("id", str(review_id)).execute()
 
     if not review_response.data:
         raise HTTPException(
@@ -151,10 +134,7 @@ async def summarize_review(
     # Check if summary already exists
     if review.get("summary_id"):
         existing_summary = (
-            supabase.table("summaries")
-            .select("*")
-            .eq("id", review["summary_id"])
-            .execute()
+            supabase.table("summaries").select("*").eq("id", review["summary_id"]).execute()
         )
         if existing_summary.data:
             return SummaryResponse(**existing_summary.data[0])
@@ -171,11 +151,7 @@ async def summarize_review(
         "ai_model": "placeholder",
     }
 
-    summary_response = (
-        supabase.table("summaries")
-        .insert(summary_data)
-        .execute()
-    )
+    summary_response = supabase.table("summaries").insert(summary_data).execute()
 
     if not summary_response.data:
         raise HTTPException(
@@ -186,8 +162,8 @@ async def summarize_review(
     summary = summary_response.data[0]
 
     # Link summary to review
-    supabase.table("reviews").update(
-        {"summary_id": summary["id"]}
-    ).eq("id", str(review_id)).execute()
+    supabase.table("reviews").update({"summary_id": summary["id"]}).eq(
+        "id", str(review_id)
+    ).execute()
 
     return SummaryResponse(**summary)
