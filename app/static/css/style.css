@@ -3,25 +3,76 @@
    Supplements TailwindCSS with component-specific styling
    ============================================================ */
 
+/* ---- Dark Mode CSS Variables ---- */
+:root {
+    --color-bg: #f9fafb;
+    --color-surface: #ffffff;
+    --color-border: #e5e7eb;
+    --color-text-primary: #111827;
+    --color-text-secondary: #4b5563;
+    --color-text-muted: #9ca3af;
+    --color-scrollbar-track: #f9fafb;
+    --color-scrollbar-thumb: #d1d5db;
+    --color-scrollbar-thumb-hover: #9ca3af;
+    --color-sentiment-positive-bg: #dcfce7;
+    --color-sentiment-positive-text: #166534;
+    --color-sentiment-negative-bg: #fee2e2;
+    --color-sentiment-negative-text: #991b1b;
+    --color-sentiment-neutral-bg: #f3f4f6;
+    --color-sentiment-neutral-text: #374151;
+    --color-sentiment-mixed-bg: #fef9c3;
+    --color-sentiment-mixed-text: #854d0e;
+}
+
+html.dark {
+    --color-bg: #111827;
+    --color-surface: #1f2937;
+    --color-border: #374151;
+    --color-text-primary: #f9fafb;
+    --color-text-secondary: #d1d5db;
+    --color-text-muted: #6b7280;
+    --color-scrollbar-track: #1f2937;
+    --color-scrollbar-thumb: #4b5563;
+    --color-scrollbar-thumb-hover: #6b7280;
+    --color-sentiment-positive-bg: #14532d;
+    --color-sentiment-positive-text: #86efac;
+    --color-sentiment-negative-bg: #7f1d1d;
+    --color-sentiment-negative-text: #fca5a5;
+    --color-sentiment-neutral-bg: #374151;
+    --color-sentiment-neutral-text: #d1d5db;
+    --color-sentiment-mixed-bg: #713f12;
+    --color-sentiment-mixed-text: #fde68a;
+}
+
+/* ---- Theme Transition ---- */
+html,
+body,
+nav,
+footer,
+.review-card,
+.feature-card {
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
 /* ---- Sentiment Badges ---- */
 .sentiment-positive {
-    background-color: #dcfce7;
-    color: #166534;
+    background-color: var(--color-sentiment-positive-bg);
+    color: var(--color-sentiment-positive-text);
 }
 
 .sentiment-negative {
-    background-color: #fee2e2;
-    color: #991b1b;
+    background-color: var(--color-sentiment-negative-bg);
+    color: var(--color-sentiment-negative-text);
 }
 
 .sentiment-neutral {
-    background-color: #f3f4f6;
-    color: #374151;
+    background-color: var(--color-sentiment-neutral-bg);
+    color: var(--color-sentiment-neutral-text);
 }
 
 .sentiment-mixed {
-    background-color: #fef9c3;
-    color: #854d0e;
+    background-color: var(--color-sentiment-mixed-bg);
+    color: var(--color-sentiment-mixed-text);
 }
 
 /* ---- Star Rating ---- */
@@ -134,16 +185,16 @@ button {
 }
 
 ::-webkit-scrollbar-track {
-    background: #f9fafb;
+    background: var(--color-scrollbar-track);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #d1d5db;
+    background: var(--color-scrollbar-thumb);
     border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #9ca3af;
+    background: var(--color-scrollbar-thumb-hover);
 }
 
 /* ---- Prose Overrides ---- */

@@ -246,9 +246,49 @@ function updateAuthUI() {
 }
 
 /* ============================================================
+   Dark Mode
+   ============================================================ */
+
+var THEME_KEY = 'reviewsummary_theme';
+
+/**
+ * Toggle between dark and light mode, persist the choice in localStorage.
+ */
+function toggleDarkMode() {
+    var isDark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem(THEME_KEY, isDark ? 'dark' : 'light');
+    updateDarkModeIcons(isDark);
+}
+
+/**
+ * Show the correct sun/moon icon based on the current mode.
+ */
+function updateDarkModeIcons(isDark) {
+    var sun = document.getElementById('icon-sun');
+    var moon = document.getElementById('icon-moon');
+    if (!sun || !moon) return;
+    if (isDark) {
+        sun.classList.remove('hidden');
+        moon.classList.add('hidden');
+    } else {
+        sun.classList.add('hidden');
+        moon.classList.remove('hidden');
+    }
+}
+
+/**
+ * Initialise dark mode icons to match the current state on page load.
+ */
+function initDarkMode() {
+    var isDark = document.documentElement.classList.contains('dark');
+    updateDarkModeIcons(isDark);
+}
+
+/* ============================================================
    Initialisation
    ============================================================ */
 
 document.addEventListener('DOMContentLoaded', function () {
     updateAuthUI();
+    initDarkMode();
 });
