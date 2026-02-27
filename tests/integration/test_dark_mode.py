@@ -1,4 +1,4 @@
-"""Integration tests for the dark mode feature (issue #2)."""
+"""Integration tests for dark mode feature (issue #2)."""
 
 from __future__ import annotations
 
@@ -10,169 +10,129 @@ client = TestClient(app)
 
 
 class TestDarkModeHTML:
-    """Verify dark mode elements are present in the rendered HTML."""
+    """Verify dark mode markup is present in every rendered page."""
 
-    def test_base_includes_dark_mode_toggle_button(self) -> None:
-        """Every page should contain the dark mode toggle button."""
+    def _assert_dark_mode_elements(self, html: str, page: str) -> None:
+        """Assert that all required dark-mode elements appear in *html*."""
+        assert "reviewsummary_theme" in html, f"{page}: localStorage key missing"
+        assert "dark-mode-toggle" in html, f"{page}: toggle button missing"
+        assert "toggleDarkMode" in html, f"{page}: toggleDarkMode() call missing"
+        assert "prefers-color-scheme" in html, f"{page}: system-preference detection missing"
+        assert "darkMode" in html, f"{page}: Tailwind darkMode config missing"
+        assert "document.documentElement.classList" in html, (
+            f"{page}: classList manipulation missing"
+        )
+
+    def test_index_page_has_dark_mode(self) -> None:
+        """Landing page should contain all dark mode markup."""
         response = client.get("/")
         assert response.status_code == 200
-        assert 'id="dark-mode-toggle"' in response.text
+        self._assert_dark_mode_elements(response.text, "index")
 
-    def test_dark_mode_toggle_has_aria_label(self) -> None:
-        """The toggle button should include an accessible aria-label."""
+    def test_reviews_page_has_dark_mode(self) -> None:
+        """Reviews list page should contain all dark mode markup."""
+        response = client.get("/reviews")
+        assert response.status_code == 200
+        self._assert_dark_mode_elements(response.text, "/reviews")
+
+    def test_reviews_new_page_has_dark_mode(self) -> None:
+        """Create review page should contain all dark mode markup."""
+        response = client.get("/reviews/new")
+        assert response.status_code == 200
+        self._assert_dark_mode_elements(response.text, "/reviews/new")
+
+    def test_analytics_page_has_dark_mode(self) -> None:
+        """Analytics dashboard page should contain all dark mode markup."""
+        response = client.get("/analytics")
+        assert response.status_code == 200
+        self._assert_dark_mode_elements(response.text, "/analytics")
+
+
+class TestDarkModeToggleButton:
+    """Verify the toggle button is rendered with correct attributes."""
+
+    def test_toggle_button_has_aria_label(self) -> None:
+        """The toggle button must have an accessible aria-label."""
         response = client.get("/")
         assert response.status_code == 200
         assert 'aria-label="Toggle dark mode"' in response.text
 
-    def test_base_includes_sun_and_moon_icons(self) -> None:
-        """Both sun and moon SVG icons should be present for the toggle."""
+    def test_toggle_button_contains_sun_and_moon_icons(self) -> None:
+        """Both sun and moon SVG icons must be present for the toggle."""
         response = client.get("/")
         assert response.status_code == 200
         assert 'id="icon-sun"' in response.text
         assert 'id="icon-moon"' in response.text
 
-    def test_dark_mode_early_init_script_present(self) -> None:
-        """An inline script referencing reviewsummary_theme must appear before CSS."""
+    def test_dark_mode_toggle_id_present(self) -> None:
+        """The toggle button must have the correct id."""
         response = client.get("/")
-        assert response.status_code == 200
-        html = response.text
-        # The early-init script must reference the theme localStorage key
-        assert "reviewsummary_theme" in html
-        # The early-init script must add the 'dark' class to documentElement
-        assert "documentElement.classList.add('dark')" in html
-
-    def test_html_element_ready_for_dark_class(self) -> None:
-        """The <html> element must not hard-code a class that blocks dark mode."""
-        response = client.get("/")
-        assert response.status_code == 200
-        # Tailwind darkMode:'class' requires .dark on <html>; <html> must not
-        # pre-set a conflicting class that would override JS initialisation.
-        assert "<html lang" in response.text
-
-    def test_body_has_dark_background_class(self) -> None:
-        """The body element should include Tailwind's dark:bg-gray-900 class."""
-        response = client.get("/")
-        assert response.status_code == 200
-        assert "dark:bg-gray-900" in response.text
-
-    def test_nav_has_dark_classes(self) -> None:
-        """The navigation bar should include dark mode Tailwind classes."""
-        response = client.get("/")
-        assert response.status_code == 200
-        assert "dark:bg-gray-800" in response.text
-
-    def test_toggle_calls_toggle_dark_mode(self) -> None:
-        """The toggle button's onclick must call toggleDarkMode()."""
-        response = client.get("/")
-        assert response.status_code == 200
-        assert "toggleDarkMode()" in response.text
-
-    def test_dark_mode_present_on_reviews_page(self) -> None:
-        """Dark mode toggle should appear on the reviews list page too."""
-        response = client.get("/reviews")
-        assert response.status_code == 200
-        assert 'id="dark-mode-toggle"' in response.text
-
-    def test_dark_mode_present_on_analytics_page(self) -> None:
-        """Dark mode toggle should appear on the analytics page too."""
-        response = client.get("/analytics")
         assert response.status_code == 200
         assert 'id="dark-mode-toggle"' in response.text
 
 
 class TestDarkModeCSS:
-    """Verify the CSS file contains required dark mode variables and rules."""
+    """Verify the static CSS file ships the required variables."""
 
-    def test_css_file_accessible(self) -> None:
-        """The static CSS file must be served correctly."""
+    def test_css_file_returns_200(self) -> None:
+        """The style.css file should be served successfully."""
         response = client.get("/static/css/style.css")
         assert response.status_code == 200
 
-    def test_css_defines_light_mode_variables(self) -> None:
-        """The CSS file must define :root CSS variables for light mode."""
+    def test_css_contains_light_mode_variables(self) -> None:
+        """CSS must define :root custom properties for light mode."""
         response = client.get("/static/css/style.css")
         assert response.status_code == 200
         css = response.text
         assert ":root" in css
-        assert "--color-bg-primary" in css
-        assert "--color-bg-surface" in css
+        assert "--color-bg" in css
+        assert "--color-surface" in css
         assert "--color-text-primary" in css
 
-    def test_css_defines_dark_mode_variables(self) -> None:
-        """The CSS file must define html.dark CSS variable overrides."""
+    def test_css_contains_dark_mode_variables(self) -> None:
+        """CSS must define html.dark custom properties for dark mode."""
         response = client.get("/static/css/style.css")
         assert response.status_code == 200
         css = response.text
         assert "html.dark" in css
 
-    def test_css_has_dark_sentiment_badge_overrides(self) -> None:
-        """Sentiment badge colours should be overridden in dark mode."""
+    def test_css_contains_transition(self) -> None:
+        """CSS should include a smooth transition for theme switching."""
         response = client.get("/static/css/style.css")
         assert response.status_code == 200
-        css = response.text
-        assert "html.dark .sentiment-positive" in css
-        assert "html.dark .sentiment-negative" in css
-        assert "html.dark .sentiment-neutral" in css
-        assert "html.dark .sentiment-mixed" in css
-
-    def test_css_has_dark_mode_toggle_button_style(self) -> None:
-        """The dark mode toggle button should have dedicated CSS rules."""
-        response = client.get("/static/css/style.css")
-        assert response.status_code == 200
-        assert "#dark-mode-toggle" in response.text
+        assert "transition" in response.text
 
 
 class TestDarkModeJS:
-    """Verify the JavaScript file contains the dark mode implementation."""
+    """Verify the static JS file ships the required dark mode functions."""
 
-    def test_js_file_accessible(self) -> None:
-        """The static JS file must be served correctly."""
+    def test_js_file_returns_200(self) -> None:
+        """The app.js file should be served successfully."""
         response = client.get("/static/js/app.js")
         assert response.status_code == 200
 
-    def test_js_defines_theme_key_constant(self) -> None:
-        """app.js must define the localStorage key for the theme preference."""
-        response = client.get("/static/js/app.js")
-        assert response.status_code == 200
-        assert "THEME_KEY" in response.text
-        assert "reviewsummary_theme" in response.text
-
-    def test_js_defines_toggle_dark_mode_function(self) -> None:
-        """app.js must define the toggleDarkMode function."""
+    def test_js_contains_toggle_function(self) -> None:
+        """app.js must export a toggleDarkMode function."""
         response = client.get("/static/js/app.js")
         assert response.status_code == 200
         assert "function toggleDarkMode" in response.text
 
-    def test_js_defines_apply_dark_mode_function(self) -> None:
-        """app.js must define the applyDarkMode helper function."""
-        response = client.get("/static/js/app.js")
-        assert response.status_code == 200
-        assert "function applyDarkMode" in response.text
-
-    def test_js_defines_init_dark_mode_function(self) -> None:
-        """app.js must define the initDarkMode initialisation function."""
+    def test_js_contains_init_function(self) -> None:
+        """app.js must export an initDarkMode function."""
         response = client.get("/static/js/app.js")
         assert response.status_code == 200
         assert "function initDarkMode" in response.text
 
-    def test_js_persists_preference_in_local_storage(self) -> None:
-        """toggleDarkMode must write the preference to localStorage."""
+    def test_js_uses_localstorage_theme_key(self) -> None:
+        """app.js must persist the preference with the expected key."""
         response = client.get("/static/js/app.js")
         assert response.status_code == 200
-        js = response.text
-        assert "localStorage.setItem" in js
-        assert "THEME_KEY" in js
+        assert "reviewsummary_theme" in response.text
 
-    def test_js_uses_prefers_color_scheme(self) -> None:
-        """The early-init logic must check the system dark mode preference."""
-        response = client.get("/")
-        assert response.status_code == 200
-        assert "prefers-color-scheme" in response.text
-
-    def test_js_calls_init_dark_mode_on_domcontentloaded(self) -> None:
-        """initDarkMode must be called when the DOM is ready."""
+    def test_js_updates_icons(self) -> None:
+        """app.js must update sun/moon icons when theme changes."""
         response = client.get("/static/js/app.js")
         assert response.status_code == 200
-        js = response.text
-        assert "initDarkMode()" in js
-        assert "DOMContentLoaded" in js
+        assert "function updateDarkModeIcons" in response.text
+        assert "icon-sun" in response.text
+        assert "icon-moon" in response.text

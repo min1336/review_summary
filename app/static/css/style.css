@@ -5,151 +5,74 @@
 
 /* ---- Dark Mode CSS Variables ---- */
 :root {
-    --color-bg-primary: #f9fafb;       /* gray-50 */
-    --color-bg-surface: #ffffff;       /* white */
-    --color-bg-muted: #f3f4f6;         /* gray-100 */
-    --color-border: #e5e7eb;           /* gray-200 */
-    --color-text-primary: #111827;     /* gray-900 */
-    --color-text-secondary: #6b7280;   /* gray-500 */
-    --color-text-muted: #9ca3af;       /* gray-400 */
-    --color-text-body: #374151;        /* gray-700 */
+    --color-bg: #f9fafb;
+    --color-surface: #ffffff;
+    --color-border: #e5e7eb;
+    --color-text-primary: #111827;
+    --color-text-secondary: #4b5563;
+    --color-text-muted: #9ca3af;
     --color-scrollbar-track: #f9fafb;
     --color-scrollbar-thumb: #d1d5db;
     --color-scrollbar-thumb-hover: #9ca3af;
-    --color-spinner-track: #e5e7eb;
-    --color-spinner-head: #3b82f6;
+    --color-sentiment-positive-bg: #dcfce7;
+    --color-sentiment-positive-text: #166534;
+    --color-sentiment-negative-bg: #fee2e2;
+    --color-sentiment-negative-text: #991b1b;
+    --color-sentiment-neutral-bg: #f3f4f6;
+    --color-sentiment-neutral-text: #374151;
+    --color-sentiment-mixed-bg: #fef9c3;
+    --color-sentiment-mixed-text: #854d0e;
 }
 
 html.dark {
-    --color-bg-primary: #111827;       /* gray-900 */
-    --color-bg-surface: #1f2937;       /* gray-800 */
-    --color-bg-muted: #374151;         /* gray-700 */
-    --color-border: #374151;           /* gray-700 */
-    --color-text-primary: #f9fafb;     /* gray-50 */
-    --color-text-secondary: #9ca3af;   /* gray-400 */
-    --color-text-muted: #6b7280;       /* gray-500 */
-    --color-text-body: #d1d5db;        /* gray-300 */
+    --color-bg: #111827;
+    --color-surface: #1f2937;
+    --color-border: #374151;
+    --color-text-primary: #f9fafb;
+    --color-text-secondary: #d1d5db;
+    --color-text-muted: #6b7280;
     --color-scrollbar-track: #1f2937;
     --color-scrollbar-thumb: #4b5563;
     --color-scrollbar-thumb-hover: #6b7280;
-    --color-spinner-track: #374151;
-    --color-spinner-head: #60a5fa;
+    --color-sentiment-positive-bg: #14532d;
+    --color-sentiment-positive-text: #86efac;
+    --color-sentiment-negative-bg: #7f1d1d;
+    --color-sentiment-negative-text: #fca5a5;
+    --color-sentiment-neutral-bg: #374151;
+    --color-sentiment-neutral-text: #d1d5db;
+    --color-sentiment-mixed-bg: #713f12;
+    --color-sentiment-mixed-text: #fde68a;
 }
 
-/* ---- Dark Mode: Structural Overrides ---- */
-html.dark body {
-    background-color: var(--color-bg-primary);
-    color: var(--color-text-primary);
-}
-
-html.dark .bg-white {
-    background-color: var(--color-bg-surface) !important;
-}
-
-html.dark .bg-gray-50 {
-    background-color: var(--color-bg-primary) !important;
-}
-
-html.dark .bg-gray-100 {
-    background-color: var(--color-bg-muted) !important;
-}
-
-html.dark .border-gray-200 {
-    border-color: var(--color-border) !important;
-}
-
-html.dark .text-gray-900 {
-    color: var(--color-text-primary) !important;
-}
-
-html.dark .text-gray-700 {
-    color: var(--color-text-body) !important;
-}
-
-html.dark .text-gray-600 {
-    color: var(--color-text-secondary) !important;
-}
-
-html.dark .text-gray-500 {
-    color: var(--color-text-muted) !important;
-}
-
-html.dark .text-gray-400 {
-    color: var(--color-text-muted) !important;
-}
-
-html.dark .hover\:bg-gray-100:hover {
-    background-color: var(--color-bg-muted) !important;
-}
-
-html.dark .shadow-sm,
-html.dark .shadow-md,
-html.dark .shadow-lg,
-html.dark .shadow-xl,
-html.dark .shadow-2xl {
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px -1px rgba(0, 0, 0, 0.4) !important;
-}
-
-html.dark .border-gray-100 {
-    border-color: var(--color-border) !important;
-}
-
-html.dark .border-gray-300 {
-    border-color: #4b5563 !important;
-}
-
-html.dark input,
-html.dark textarea,
-html.dark select {
-    background-color: var(--color-bg-muted) !important;
-    color: var(--color-text-primary) !important;
-    border-color: #4b5563 !important;
-}
-
-html.dark input::placeholder,
-html.dark textarea::placeholder {
-    color: var(--color-text-muted) !important;
+/* ---- Theme Transition ---- */
+html,
+body,
+nav,
+footer,
+.review-card,
+.feature-card {
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
 /* ---- Sentiment Badges ---- */
 .sentiment-positive {
-    background-color: #dcfce7;
-    color: #166534;
+    background-color: var(--color-sentiment-positive-bg);
+    color: var(--color-sentiment-positive-text);
 }
 
 .sentiment-negative {
-    background-color: #fee2e2;
-    color: #991b1b;
+    background-color: var(--color-sentiment-negative-bg);
+    color: var(--color-sentiment-negative-text);
 }
 
 .sentiment-neutral {
-    background-color: #f3f4f6;
-    color: #374151;
+    background-color: var(--color-sentiment-neutral-bg);
+    color: var(--color-sentiment-neutral-text);
 }
 
 .sentiment-mixed {
-    background-color: #fef9c3;
-    color: #854d0e;
-}
-
-html.dark .sentiment-positive {
-    background-color: #14532d;
-    color: #86efac;
-}
-
-html.dark .sentiment-negative {
-    background-color: #7f1d1d;
-    color: #fca5a5;
-}
-
-html.dark .sentiment-neutral {
-    background-color: #374151;
-    color: #d1d5db;
-}
-
-html.dark .sentiment-mixed {
-    background-color: #713f12;
-    color: #fde68a;
+    background-color: var(--color-sentiment-mixed-bg);
+    color: var(--color-sentiment-mixed-text);
 }
 
 /* ---- Star Rating ---- */
@@ -206,8 +129,8 @@ html.dark .sentiment-mixed {
 .loading-spinner {
     width: 40px;
     height: 40px;
-    border: 4px solid var(--color-spinner-track);
-    border-top-color: var(--color-spinner-head);
+    border: 4px solid #e5e7eb;
+    border-top-color: #3b82f6;
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
 }
@@ -282,41 +205,6 @@ button {
 .prose ul {
     list-style-type: disc;
     padding-left: 1.5rem;
-}
-
-/* ---- Dark Mode Toggle Button ---- */
-#dark-mode-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-    background: none;
-    border: 1px solid var(--color-border);
-    color: var(--color-text-secondary);
-    cursor: pointer;
-    transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, color 0.15s ease-in-out;
-}
-
-#dark-mode-toggle:hover {
-    background-color: var(--color-bg-muted);
-    color: var(--color-text-primary);
-}
-
-/* ---- Dark Mode Transition ---- */
-body,
-nav,
-footer,
-.bg-white,
-.bg-gray-50,
-.bg-gray-100,
-.border-gray-200,
-.text-gray-900,
-.text-gray-700,
-.text-gray-600,
-.text-gray-500 {
-    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out;
 }
 
 /* ---- Responsive Adjustments ---- */
