@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
-
 from pydantic import BaseModel, Field
 
 
@@ -22,7 +20,7 @@ class CategoryStats(BaseModel):
 
     category: str = Field(..., description="Category name")
     count: int = Field(..., ge=0, description="Number of reviews in this category")
-    avg_rating: Optional[float] = Field(None, description="Average rating for this category")
+    avg_rating: float | None = Field(None, description="Average rating for this category")
 
 
 class AnalyticsResponse(BaseModel):
@@ -31,4 +29,4 @@ class AnalyticsResponse(BaseModel):
     sentiment_stats: SentimentStats
     category_stats: list[CategoryStats]
     total_reviews: int = Field(..., ge=0, description="Total number of reviews")
-    avg_rating: Optional[float] = Field(None, description="Overall average rating")
+    avg_rating: float | None = Field(None, description="Overall average rating")

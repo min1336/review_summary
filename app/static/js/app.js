@@ -246,9 +246,74 @@ function updateAuthUI() {
 }
 
 /* ============================================================
+   Dark Mode
+   ============================================================ */
+
+var DARK_MODE_KEY = 'reviewsummary_darkmode';
+
+/**
+ * Apply the given theme ('dark' or 'light') to the document and update the toggle icons.
+ *
+ * @param {'dark'|'light'} theme
+ */
+function applyTheme(theme) {
+    if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+    } else {
+        document.documentElement.classList.remove('dark');
+    }
+    updateDarkModeToggle(theme);
+}
+
+/**
+ * Update the toggle button icon to reflect the current theme.
+ */
+function updateDarkModeToggle(theme) {
+    var btn = document.getElementById('dark-mode-toggle');
+    if (!btn) return;
+    var sunIcon = btn.querySelector('.sun-icon');
+    var moonIcon = btn.querySelector('.moon-icon');
+    if (theme === 'dark') {
+        if (sunIcon) sunIcon.classList.remove('hidden');
+        if (moonIcon) moonIcon.classList.add('hidden');
+    } else {
+        if (sunIcon) sunIcon.classList.add('hidden');
+        if (moonIcon) moonIcon.classList.remove('hidden');
+    }
+}
+
+/**
+ * Toggle dark mode and persist the preference in localStorage.
+ */
+function toggleDarkMode() {
+    var isDark = document.documentElement.classList.contains('dark');
+    var newTheme = isDark ? 'light' : 'dark';
+    localStorage.setItem(DARK_MODE_KEY, newTheme);
+    applyTheme(newTheme);
+}
+
+/**
+ * Initialise dark mode from localStorage or system preference.
+ * Listens for system preference changes when no stored preference exists.
+ */
+function initDarkMode() {
+    var saved = localStorage.getItem(DARK_MODE_KEY);
+    var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    applyTheme(saved || (prefersDark ? 'dark' : 'light'));
+
+    // Keep in sync when system preference changes (only when no stored preference)
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
+        if (!localStorage.getItem(DARK_MODE_KEY)) {
+            applyTheme(e.matches ? 'dark' : 'light');
+        }
+    });
+}
+
+/* ============================================================
    Initialisation
    ============================================================ */
 
 document.addEventListener('DOMContentLoaded', function () {
     updateAuthUI();
+    initDarkMode();
 });

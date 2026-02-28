@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any
 from uuid import UUID, uuid4
 
 
@@ -16,10 +16,10 @@ class Review:
     content: str
     category: str
     id: UUID = field(default_factory=uuid4)
-    rating: Optional[int] = None
-    source: Optional[str] = None
-    author_id: Optional[UUID] = None
-    summary_id: Optional[UUID] = None
+    rating: int | None = None
+    source: str | None = None
+    author_id: UUID | None = None
+    summary_id: UUID | None = None
     created_at: datetime = field(default_factory=datetime.now)
     updated_at: datetime = field(default_factory=datetime.now)
 
