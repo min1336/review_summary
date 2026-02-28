@@ -252,7 +252,9 @@ function updateAuthUI() {
 var DARK_MODE_KEY = 'reviewsummary_darkmode';
 
 /**
- * Apply the given theme ('dark' or 'light') to the document.
+ * Apply the given theme ('dark' or 'light') to the document and update the toggle icons.
+ *
+ * @param {'dark'|'light'} theme
  */
 function applyTheme(theme) {
     if (theme === 'dark') {
@@ -292,15 +294,19 @@ function toggleDarkMode() {
 
 /**
  * Initialise dark mode from localStorage or system preference.
+ * Listens for system preference changes when no stored preference exists.
  */
 function initDarkMode() {
     var saved = localStorage.getItem(DARK_MODE_KEY);
-    if (saved) {
-        applyTheme(saved);
-    } else {
-        var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        applyTheme(prefersDark ? 'dark' : 'light');
-    }
+    var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    applyTheme(saved || (prefersDark ? 'dark' : 'light'));
+
+    // Keep in sync when system preference changes (only when no stored preference)
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
+        if (!localStorage.getItem(DARK_MODE_KEY)) {
+            applyTheme(e.matches ? 'dark' : 'light');
+        }
+    });
 }
 
 /* ============================================================
